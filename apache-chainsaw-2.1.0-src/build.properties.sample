@@ -1,0 +1,40 @@
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Chainsaw requires the following jars to build and run:
+# * Jakarta Commons VFS 1.0 RC1+ (requires sub-dependecy of Jakarta Commons Logging).
+# * XStream - http://xstream.codehaus.org (BSD License)
+# * Log4j 1.3 jars 
+# 
+# Place the Jars in a local 'lib' folder, and Chainsaw should compile and run
+#
+# Jakarta Commons VFS Required if you wish to compile and include the 
+# org.apache.log4j.chainsaw.vfs.VFSLogFilePatternReceiver virtual file system receiver
+# to access log files in Chainsaw, but is optional.
+#
+# See http://jakarta.apache.org/commons/sandbox/vfs/filesystems.html 
+# for a full description of supported file systems (ssh, zip, etc).
+#
+# See http://jakarta.apache.org/commons/sandbox/vfs/download.html for 
+# file system-specific jars required when running Chainsaw with a VFSLogFilePatternReceiver
+#
+# NOTE: VFS requires Commons logging JAR to run
+
+# Dependencies directory
+deps.dir=lib
+
+# The location of the log4j source code (unpacked), required if you want to build the HTML JavaDoc for the Receivers 
+# into the Chainsaw GUI.  This is a MUST for building the complete distribution
+log4j.src=../log4j/

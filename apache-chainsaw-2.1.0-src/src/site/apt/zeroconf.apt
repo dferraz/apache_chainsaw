@@ -1,0 +1,72 @@
+~~ Licensed to the Apache Software Foundation (ASF) under one or more
+~~ contributor license agreements.  See the NOTICE file distributed with
+~~ this work for additional information regarding copyright ownership.
+~~ The ASF licenses this file to You under the Apache License, Version 2.0
+~~ (the "License"); you may not use this file except in compliance with
+~~ the License.  You may obtain a copy of the License at
+~~
+~~      http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~ Unless required by applicable law or agreed to in writing, software
+~~ distributed under the License is distributed on an "AS IS" BASIS,
+~~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~~ See the License for the specific language governing permissions and
+~~ limitations under the License.
+ZeroConf - Zero Configuration
+
+    Apache Chainsaw&#x2122; can use ZeroConf to discover advertised appenders and automatically configure a matching receiver, but you must update your configuration in order to advertise your appender via ZeroConf.
+    
+    If you are using a newer version of log4j (1.2.16 or greater), most of the network-based appenders are capable of advertising their configurations via ZeroConf, but have this
+capability disabled by default.
+    To advertise an appender via ZeroConf:
+        [[1]] Download {{{http://sourceforge.net/projects/jmdns/}JmDNS}}
+
+        [[2]] Add the <jmdns.jar> to your application's classpath
+
+        [[3]] Modify your log4j configuration so that the appender is set to advertise its configuration via ZeroConf (by setting the 'advertiseViaMulticastDNS' parameter to 'true')
+
+    Here is a complete log4j.xml file that you can use as a base SocketAppender configuration which advertises the appender via ZeroConf:</p>
+
++-------------------------------+
+<log4j:configuration debug="false" threshold="debug"  xmlns:log4j="http://jakarta.apache.org/log4j/">
+    <appender name="socketAppender" class="org.apache.log4j.net.SocketAppender">
+        <param name="Name" value="MySockeAppender" />
+        <param name="advertiseViaMulticastDNS" value="true" />
+    </appender>
+    <!--ROOT Logger-->
+    <root>
+        <level value="INFO" />
+        <appender-ref ref="socketAppender" />
+    </root>
+</log4j:configuration>
++-------------------------------+
+
+    If you are using an older version of log4j (prior to 1.2.16), ZeroConfSocketHubAppender is a ZeroConf-capable appender which is backward compatible with the prior versions of SocketHubAppender and can advertise the appender configuration via ZeroConf:</p>
+        [[1]] Download {{{http://sourceforge.net/projects/jmdns/}JmDNS}}
+
+        [[2]] Add the <i>jmdns.jar</i> to your application's classpath
+
+        [[3]] Download {{{http://logging.apache.org/log4j/docs/webstart/chainsaw/log4j-zeroconf.zip}log4j ZeroConf extension (provides ZeroConfSocketHubAppender)}}
+
+        [[4]] Add the <log4j-zeroconf.jar> to your application's classpath
+
+    Here is a complete log4j.xml file that you can use as a base ZeroConfSocketAppender configuration which advertises the appender via ZeroConf:</p>
+
++-------------------------------+
+<log4j:configuration debug="false" threshold="debug"  xmlns:log4j="http://jakarta.apache.org/log4j/">
+    <appender name="zeroconf" class="org.apache.log4j.net.ZeroConfSocketHubAppender">
+        <param name="Name" value="MyZeroConfSockeHubAppender" />
+    </appender>
+    <!--ROOT Logger-->
+    <root>
+        <level value="INFO" />
+        <appender-ref ref="zeroconf" />
+    </root>
+</log4j:configuration>
++-------------------------------+
+
+    Once you have enabled ZeroConf in your log4j configuration and started your application, you should be able to click on the Zeroconf tab inside Chainsaw and see the advertised appenders listed. If you double click on a row,
+Chainsaw will automatically connect to your application and start receiving events. You can tick the 'auto-connect' option to have Chainsaw immediately connect as soon as it sees your application started. Great for Dev/QA environment.</p>
+
+Firewalls
+    Multicast protocols generally don't pass through firewall, so in a production environment Zeroconf won't work.</p>

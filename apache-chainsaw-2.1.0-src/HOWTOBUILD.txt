@@ -1,0 +1,84 @@
+ Licensed to the Apache Software Foundation (ASF) under one or more
+ contributor license agreements.  See the NOTICE file distributed with
+ this work for additional information regarding copyright ownership.
+ The ASF licenses this file to You under the Apache License, Version 2.0
+ (the "License"); you may not use this file except in compliance with
+ the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+
+HOWTOBUILD.txt
+==============
+
+For General Users & log4j developers
+=====================================
+Firstly, you'll need maven 2.0.9+ to build Chainsaw:
+
+http://maven.apache.org
+
+
+* cd to Chainsaw project checkout directory
+
+	mvn site:site
+	mvn install
+
+This will automatically build and assemble the Chainsaw distribution which includes a .sh & .bat shell script to run Chainsaw.  You can then run Chainsaw as follows:
+
+[*nix]
+sh target/appassembler/bin/chainsaw
+
+[Windows]
+target/appassembler/bin/chainsaw.bat
+
+[OSX]
+You can use the *nix steps above, or go one extra step for a nicer OSX experience
+
+mvn package appbundle:bundle
+
+This will create an OSX distribution, look inside the target folder for the packaged OSX application and .dmg distribution.  You can drag the application to your /Applications folder, or just double click it from the target folder.
+
+For log4j developers
+====================
+
+Creating a Webstart distribution
+================================
+
+To create the Webstart distribution requires:
+	* a keystore configured with a valid code signing key
+		I've always found this link useful:
+			http://www.dallaway.com/acad/webstart/
+			
+	* A maven profile that defines the parameters for code signing (otherwise passwords and stuff need to be embedded in the pom.xml)
+	 	Edit your ${user.home}/.m2/settings.xml file, such that it has something like:
+
+		<settings>
+		....
+		<profiles>
+		....
+		  <profile>
+		 	<id>chainsaw-signing</id>
+		    <properties>
+		      <chainsaw.webstart.keystore>/somepath/keystore</chainsaw.webstart.keystore>
+		      <chainsaw.webstart.keypass>somesupersecurepassword</chainsaw.webstart.keypass>
+		      <chainsaw.webstart.storepass>someothersupersecurepassword</chainsaw.webstart.storepass>
+		      <chainsaw.webstart.alias>aliasofcertificateinkeystore</chainsaw.webstart.alias>
+		    </properties>
+		  </profile>
+		...
+		</profiles>
+		....
+		</settings>
+		
+	Then create the webstart package:
+	
+	mvn -Pchainsaw-signing install webstart:jnlp
+	
+	Inside the target folder will contain a .zip file containing the webstart distribution, including the generated .jnlp file.  
+	
+	
